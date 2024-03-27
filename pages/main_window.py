@@ -1,7 +1,8 @@
+import cv2
 import yaml
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget, QDesktopWidget, QTextEdit, \
-    QHBoxLayout, QSizePolicy
+    QHBoxLayout, QSizePolicy, QFileDialog
 
 from utils import logger
 
@@ -11,6 +12,8 @@ class MainWindow(QMainWindow):
         logger.info('初始化主页')
 
         super().__init__()
+
+        self.video_file = None
 
         # 读取 YAML 文件
         with open('configs/config.yaml', 'r') as file:
@@ -44,6 +47,7 @@ class MainWindow(QMainWindow):
         upload_button = QPushButton("上传视频")
         upload_button.setFixedSize(100, 30)
         upload_button.setStyleSheet("background-color: white; color: black; border-radius: 15px;")
+        upload_button.clicked.connect(self.upload_video)
 
         # 创建视频信息展示框
         video_info_text = QTextEdit()
@@ -55,6 +59,7 @@ class MainWindow(QMainWindow):
         run_button = QPushButton("开始运行")
         run_button.setFixedHeight(30)  # 设置按钮的高度
         run_button.setStyleSheet("background-color: green; color: white; border-radius: 5px;")
+        run_button.clicked.connect(self.start)
         main_layout.addWidget(run_button)
 
         # 创建退出登录按钮
@@ -89,3 +94,30 @@ class MainWindow(QMainWindow):
 
         # 设置窗口大小策略为固定大小
         self.setFixedSize(self.size())
+
+    def upload_video(self):
+        """
+        上传视频文件
+        :return:
+        """
+        # 打开文件对话框并获取用户选择的文件路径
+        file_path, _ = QFileDialog.getOpenFileName(self, "选择视频文件", "", "视频文件 (*.mp4 *.avi)")
+        if file_path:
+            # 用户选择了文件，可以进行进一步处理，例如读取视频文件等
+            logger.info("选择文件路径：" + file_path)
+
+            self.video_file = cv2.VideoCapture(file_path)
+
+    def start(self):
+        """
+        开始运行
+        :return:
+        """
+        pass  # TODO: 接入运行逻辑
+
+    def logout(self):
+        """
+        退出登录
+        :return:
+        """
+        pass  # TODO: 返回到登录页面并关闭当前页面
