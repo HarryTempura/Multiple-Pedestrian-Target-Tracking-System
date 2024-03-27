@@ -1,6 +1,7 @@
 import yaml
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget, QDesktopWidget
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget, QDesktopWidget, QTextEdit, \
+    QHBoxLayout, QSizePolicy
 
 from utils import logger
 
@@ -16,8 +17,8 @@ class MainWindow(QMainWindow):
             data = yaml.safe_load(file)
 
         # 访问数据
-        window_width = data['general']['window_width']
-        window_height = data['general']['window_height']
+        window_width = data['main']['window_width']
+        window_height = data['main']['window_height']
 
         self.setWindowTitle('多行人目标跟踪系统')
 
@@ -36,24 +37,55 @@ class MainWindow(QMainWindow):
         palette.setBrush(QPalette.Background, QBrush(background_image.scaled(self.size())))
         self.setPalette(palette)
 
-        # 创建一个垂直布局对象
-        layout = QVBoxLayout()
+        # 创建主布局
+        main_layout = QVBoxLayout()
 
-        label = QLabel('Hello, PyQt5!')
-        label.setFont(QFont('Arial', 24))
-        # layout.addWidget 将标控件加到布局中
-        layout.addWidget(label)
+        # 创建上传视频按钮
+        upload_button = QPushButton("上传视频")
+        upload_button.setFixedSize(100, 30)
+        upload_button.setStyleSheet("background-color: white; color: black; border-radius: 15px;")
 
-        # 创建一个按钮控件，并设置文本为 'Click Me'
-        button = QPushButton('Click Me')
-        layout.addWidget(button)
+        # 创建视频信息展示框
+        video_info_text = QTextEdit()
+        video_info_text.setReadOnly(True)
+        video_info_text.setStyleSheet("background-color: rgba(255, 255, 255, 128); border-radius: 5px;")
+        main_layout.addWidget(video_info_text)  # addWidget()函数将控件添加到当前布局
 
-        # 创建一个 QWidget 控件作为布局的容器
-        container = QWidget()
-        # 将布局设置为容器的布局
-        container.setLayout(layout)
-        # 将容器设置为主窗口的中央部件
-        self.setCentralWidget(container)
+        # 创建开始运行按钮
+        run_button = QPushButton("开始运行")
+        run_button.setFixedHeight(30)  # 设置按钮的高度
+        run_button.setStyleSheet("background-color: green; color: white; border-radius: 5px;")
+        main_layout.addWidget(run_button)
+
+        # 创建退出登录按钮
+        logout_button = QPushButton("退出登录")
+        logout_button.setFixedSize(100, 30)
+        logout_button.setStyleSheet("background-color: red; color: white; border-radius: 15px;")
+
+        # 创建左上角布局
+        top_left_layout = QHBoxLayout()
+        top_left_layout.addWidget(logout_button)
+        top_left_layout.addStretch()
+
+        # 创建主部件并设置布局
+        central_widget = QWidget()
+        central_widget.setLayout(main_layout)
+        self.setCentralWidget(central_widget)
+
+        # 创建顶部工具栏
+        toolbar = self.addToolBar("Toolbar")
+        toolbar.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  # 设置工具栏的大小策略
+
+        # 添加 upload_button 按钮
+        toolbar.addWidget(upload_button)
+
+        # 添加伸缩空间
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        toolbar.addWidget(spacer)
+
+        # 添加 logout_button 按钮
+        toolbar.addWidget(logout_button)
 
         # 设置窗口大小策略为固定大小
-        # self.setFixedSize(self.size())
+        self.setFixedSize(self.size())
