@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from pages.login_window import LoginWindow
+from pages.login import LoginWindow
 from pages.main_window import MainWindow
 from utils import logger
 

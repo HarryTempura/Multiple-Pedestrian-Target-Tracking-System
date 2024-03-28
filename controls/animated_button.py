@@ -1,28 +1,39 @@
-from PyQt5.QtCore import QPropertyAnimation, QRect
+from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 
 
 class AnimatedButton(QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.animation = QPropertyAnimation(self, b"geometry")
+        self.animation = QPropertyAnimation(self, b"shadow")
+        self.shadow = 0
 
     def mousePressEvent(self, event):
-        # 鼠标按下时的缩放动画效果
-        start_rect = self.geometry()
-        end_rect = start_rect.adjusted(-5, -5, 5, 5)
-        self.animate(start_rect, end_rect)
+        self.shadow = 10
+        self.animateShadow(0, 10)
         super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        # 鼠标释放时的缩放动画效果
-        start_rect = self.geometry()
-        end_rect = start_rect.adjusted(5, 5, -5, -5)
-        self.animate(start_rect, end_rect)
+        self.shadow = 0
+        self.animateShadow(10, 0)
         super().mouseReleaseEvent(event)
 
-    def animate(self, start_rect, end_rect):
+    def animateShadow(self, start_value, end_value):
         self.animation.setDuration(100)
-        self.animation.setStartValue(start_rect)
-        self.animation.setEndValue(end_rect)
+        self.animation.setStartValue(start_value)
+        self.animation.setEndValue(end_value)
         self.animation.start()
+
+    def setShadow(self, value):
+        self.shadow = value
+        self.update()
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        qp = QPainter(self)
+        qp.setRenderHint(QPainter.Antialiasing)
+
+        color = QColor(0, 0, 0, self.shadow)
+        qp.setBrush(color)
+        qp.drawRoundedRect(self.rect(), 5, 5)

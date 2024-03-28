@@ -1,4 +1,4 @@
-# 环境信息
-PyQt5~=5.15.10
+# 环境信息python==3.11
 opencv-python
+PyQt5~=5.15.10
 pyyaml~=6.0.1

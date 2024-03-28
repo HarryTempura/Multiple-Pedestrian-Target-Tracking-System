@@ -5,12 +5,12 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidg
     QHBoxLayout, QSizePolicy, QFileDialog
 
 from controls.animated_button import AnimatedButton
-from pages.login_window import LoginWindow
+from pages.login import LoginWindow
 from utils import logger
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, position=None):
         logger.info('初始化主页')
 
         super().__init__()
@@ -25,20 +25,24 @@ class MainWindow(QMainWindow):
         # 访问数据
         window_width = data['main']['window_width']
         window_height = data['main']['window_height']
+        background = data['background']['image']
 
         self.setWindowTitle('多行人目标跟踪系统')
 
         # 设置窗口大小
         self.resize(window_width, window_height)
 
-        # 计算窗口在屏幕上的位置
-        screen_geometry = QDesktopWidget().screenGeometry()
-        x = (screen_geometry.width() - self.width()) // 2
-        y = (screen_geometry.height() - self.height()) // 3
-        self.move(x, y)
+        if position is None:
+            # 计算窗口在屏幕上的位置
+            screen_geometry = QDesktopWidget().screenGeometry()
+            x = (screen_geometry.width() - self.width()) // 2
+            y = (screen_geometry.height() - self.height()) // 3
+            self.move(x, y)
+        else:
+            self.move(position)
 
         # 设置背景图片
-        background_image = QPixmap("data/images/MOSS.jpeg")
+        background_image = QPixmap(background)
         palette = self.palette()
         palette.setBrush(QPalette.Background, QBrush(background_image.scaled(self.size())))
         self.setPalette(palette)
@@ -47,26 +51,27 @@ class MainWindow(QMainWindow):
         self.main_layout = QVBoxLayout()
 
         # 创建上传视频按钮
-        self.upload_button = QPushButton("上传视频")
+        self.upload_button = AnimatedButton("上传视频")
         self.upload_button.setFixedSize(100, 30)
         self.upload_button.setStyleSheet("background-color: white; color: black; border-radius: 5px;")
         self.upload_button.clicked.connect(self.upload_video)
 
         # 创建视频信息展示框
+        # TODO: 回显优化成图片
         self.video_info_text = QTextEdit()
         self.video_info_text.setReadOnly(True)
         self.video_info_text.setStyleSheet("background-color: rgba(255, 255, 255, 128); border-radius: 5px;")
         self.main_layout.addWidget(self.video_info_text)  # addWidget()函数将控件添加到当前布局
 
         # 创建开始运行按钮
-        self.run_button = QPushButton("开始运行")
+        self.run_button = AnimatedButton("开始运行")
         self.run_button.setFixedHeight(30)  # 设置按钮的高度
         self.run_button.setStyleSheet("background-color: green; color: white; border-radius: 5px;")
         self.run_button.clicked.connect(self.start)
         self.main_layout.addWidget(self.run_button)
 
         # 创建退出登录按钮
-        self.logout_button = QPushButton("退出登录")
+        self.logout_button = AnimatedButton("退出登录")
         self.logout_button.setFixedSize(100, 30)
         self.logout_button.setStyleSheet("background-color: red; color: white; border-radius: 5px;")
         self.logout_button.clicked.connect(self.logout)
