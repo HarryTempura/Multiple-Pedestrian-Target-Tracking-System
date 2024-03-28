@@ -1,3 +1,11 @@
 main:
   window_width: 1280
   window_height: 720
+
+login:
+  window_width: 300
+  window_height: 200
+
+retrieve:
+  window_width: 300
+  window_height: 400
