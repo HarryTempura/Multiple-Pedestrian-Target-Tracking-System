@@ -113,11 +113,14 @@ class RegisterWindow(QWidget):
 
         if password != confirm_password:
             QMessageBox.warning(self, '注册失败', '两次输入的密码不一致')
-        else:
-            self.login_window = LoginWindow(self.pos())
-            self.login_window.show()
+            return
 
-            self.close()
+        QMessageBox.warning(self, '注册成功', '注册成功')
+
+        self.login_window = LoginWindow(self.pos())
+        self.login_window.show()
+
+        self.close()
 
     def cancel(self):
         """

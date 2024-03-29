@@ -156,6 +156,12 @@ class ResetPasswordWindow(QWidget):
             return
 
         # TODO: 执行重置密码逻辑
+        QMessageBox.warning(self, '密码重置', '密码重置成功')
+
+        self.login_window = LoginWindow(self.pos())
+        self.login_window.show()
+
+        self.close()
 
     def cancel(self):
         """
