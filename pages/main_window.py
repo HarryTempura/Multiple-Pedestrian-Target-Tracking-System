@@ -122,7 +122,7 @@ class MainWindow(QMainWindow):
 
             # 将视频信息显示到展示框中
             self.video_info_text.append(file_path)
-            self.video_info_text.append(f"\n帧率: {fps}")
+            self.video_info_text.append(f"帧率: {fps}")
             self.video_info_text.append(f"总帧数: {frame_count}")
             self.video_info_text.append(f"分辨率: {width}x{height}")
             self.display_first_frame(self.video_file)
@@ -155,17 +155,26 @@ class MainWindow(QMainWindow):
         """
         logger.info('回显视频封面')
 
-        ret, frame = video_file.read()
+        ret, frame = video_file.read()  # 读取视频
         if ret:
-            height, width, channel = frame.shape
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # 将BGR转换为RGB
+            height, width, channel = frame_rgb.shape
             bytes_per_line = 3 * width
-            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+            q_image = QImage(frame_rgb.data, width, height, bytes_per_line, QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(q_image)
             label = QLabel()
             label.setPixmap(pixmap)
             self.video_info_text.setStyleSheet(
                 "background-color: rgba(255, 255, 255, 128); color: white; border-radius: 5px;"
             )
-            self.main_layout.insertWidget(0, label)  # 将Label插入到布局的顶部
+
+            # 清除布局中的旧图片
+            if self.main_layout.count() > 2:
+                old_label = self.main_layout.itemAt(0).widget()
+                old_label.setParent(None)
+                old_label.deleteLater()
+
+            # 将Label插入到布局的顶部
+            self.main_layout.insertWidget(0, label)
         else:
             self.video_info_text.setText("无法读取视频")
