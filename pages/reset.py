@@ -142,7 +142,7 @@ class ResetPasswordWindow(QWidget):
         confirm_password = self.confirm_password_input.text()
 
         # 非空校验
-        if phone is None and captcha is None and new_password is None and confirm_password is None:
+        if phone is None or captcha is None or new_password == '' or confirm_password == '':
             QMessageBox.warning(self, '重置失败', '手机号、验证码和密码不能为空')
             return
 
