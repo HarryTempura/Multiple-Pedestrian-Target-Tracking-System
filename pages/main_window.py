@@ -1,6 +1,6 @@
 import cv2
 import yaml
-from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush
+from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush, QImage
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget, QDesktopWidget, QTextEdit, \
     QHBoxLayout, QSizePolicy, QFileDialog
 
@@ -57,10 +57,11 @@ class MainWindow(QMainWindow):
         self.upload_button.clicked.connect(self.upload_video)
 
         # 创建视频信息展示框
-        # TODO: 回显优化成图片
         self.video_info_text = QTextEdit()
         self.video_info_text.setReadOnly(True)
-        self.video_info_text.setStyleSheet("background-color: rgba(255, 255, 255, 128); border-radius: 5px;")
+        self.video_info_text.setStyleSheet(
+            "background-color: rgba(255, 255, 255, 128); color: white; border-radius: 5px;"
+        )
         self.main_layout.addWidget(self.video_info_text)  # addWidget()函数将控件添加到当前布局
 
         # 创建开始运行按钮
@@ -124,6 +125,7 @@ class MainWindow(QMainWindow):
             self.video_info_text.append(f"\n帧率: {fps}")
             self.video_info_text.append(f"总帧数: {frame_count}")
             self.video_info_text.append(f"分辨率: {width}x{height}")
+            self.display_first_frame(self.video_file)
 
     def start(self):
         """
@@ -144,3 +146,26 @@ class MainWindow(QMainWindow):
         self.login_window.show()
 
         self.close()
+
+    def display_first_frame(self, video_file):
+        """
+        将视频的第一帧作为图片显示在 QTextEdit 中
+        :param video_file:
+        :return:
+        """
+        logger.info('回显视频封面')
+
+        ret, frame = video_file.read()
+        if ret:
+            height, width, channel = frame.shape
+            bytes_per_line = 3 * width
+            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format_RGB888)
+            pixmap = QPixmap.fromImage(q_image)
+            label = QLabel()
+            label.setPixmap(pixmap)
+            self.video_info_text.setStyleSheet(
+                "background-color: rgba(255, 255, 255, 128); color: white; border-radius: 5px;"
+            )
+            self.main_layout.insertWidget(0, label)  # 将Label插入到布局的顶部
+        else:
+            self.video_info_text.setText("无法读取视频")
