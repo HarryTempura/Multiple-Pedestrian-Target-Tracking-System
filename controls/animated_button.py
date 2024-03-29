@@ -6,17 +6,18 @@ from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 class AnimatedButton(QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setProperty("shadow", 0)
         self.animation = QPropertyAnimation(self, b"shadow")
         self.shadow = 0
 
     def mousePressEvent(self, event):
-        self.shadow = 10
-        self.animateShadow(0, 10)
+        self.shadow = 30
+        self.animateShadow(0, 30)
         super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         self.shadow = 0
-        self.animateShadow(10, 0)
+        self.animateShadow(30, 0)
         super().mouseReleaseEvent(event)
 
     def animateShadow(self, start_value, end_value):
