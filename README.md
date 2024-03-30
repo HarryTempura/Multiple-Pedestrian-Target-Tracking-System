@@ -10,8 +10,8 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-## 项目打包
+## 项目打包（暂时不能用）
 
 ```shell
-Pyinstaller -F -w -i data/icos/58107744e6841_610.ico main.py
+pyinstaller -F -w -i data/icos/58107744e6841_610.ico main.py
 ```
