@@ -2,7 +2,7 @@ import cv2
 import yaml
 from PyQt5.QtGui import QFont, QPixmap, QPalette, QBrush, QImage
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidget, QDesktopWidget, QTextEdit, \
-    QHBoxLayout, QSizePolicy, QFileDialog
+    QHBoxLayout, QSizePolicy, QFileDialog, QMessageBox
 
 from controls.animated_button import AnimatedButton
 from pages.login import LoginWindow
@@ -133,6 +133,10 @@ class MainWindow(QMainWindow):
         :return:
         """
         logger.info('开始运行跟踪程序')
+
+        # 非空校验
+        if self.video_file is None:
+            QMessageBox.warning(self, '提示', '请先上传视频', QMessageBox.Ok)
         # TODO: 接入运行逻辑
 
     def logout(self):
