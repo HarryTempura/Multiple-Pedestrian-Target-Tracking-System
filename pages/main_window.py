@@ -137,6 +137,7 @@ class MainWindow(QMainWindow):
         # 非空校验
         if self.video_file is None:
             QMessageBox.warning(self, '提示', '请先上传视频', QMessageBox.Ok)
+
         # TODO: 接入运行逻辑
 
     def logout(self):
