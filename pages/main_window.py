@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
 
         super().__init__()
 
+        self.file_path = None
         self.login_window = None
         self.video_file = None
 
@@ -108,11 +109,11 @@ class MainWindow(QMainWindow):
         logger.info('选择要上传的视频文件')
 
         # 打开文件对话框并获取用户选择的文件路径
-        file_path, _ = QFileDialog.getOpenFileName(self, "选择视频文件", "", "视频文件 (*.mp4 *.avi)")
-        if file_path:
-            logger.info("选择文件路径：" + file_path)
+        self.file_path, _ = QFileDialog.getOpenFileName(self, "选择视频文件", "", "视频文件 (*.mp4 *.avi)")
+        if self.file_path:
+            logger.info("选择文件路径：" + self.file_path)
 
-            self.video_file = cv2.VideoCapture(file_path)
+            self.video_file = cv2.VideoCapture(self.file_path)
 
             # 获取视频的基本信息
             fps = self.video_file.get(cv2.CAP_PROP_FPS)
@@ -121,7 +122,7 @@ class MainWindow(QMainWindow):
             height = int(self.video_file.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
             # 将视频信息显示到展示框中
-            self.video_info_text.append(file_path)
+            self.video_info_text.append(self.file_path)
             self.video_info_text.append(f"帧率: {fps}")
             self.video_info_text.append(f"总帧数: {frame_count}")
             self.video_info_text.append(f"分辨率: {width}x{height}")
