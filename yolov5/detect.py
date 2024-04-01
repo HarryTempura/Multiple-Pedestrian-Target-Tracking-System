@@ -102,7 +102,7 @@ def run(
     device = select_device(device)
     model = DetectMultiBackend(weights, device=device, dnn=dnn, data=data, fp16=half)
     stride, names, pt = model.stride, model.names, model.pt
-    imgsz = check_img_size(imgsz, s=stride)  # check image size
+    imgsz = check_img_size(imgsz, s=stride)  # 检查图像大小
 
     # 数据加载器
     bs = 1  # 批量大小
@@ -279,7 +279,7 @@ def parse_opt(video_path=(ROOT / "data/images")):
     parser.add_argument("--save-conf", action="store_true", help="在 --save-txt 标签中保存置信度")
     parser.add_argument("--save-crop", action="store_true", help="保存裁剪的预测框")
     parser.add_argument("--nosave", action="store_true", help="不保存图像/视频")
-    parser.add_argument("--classes", nargs="+", type=int, help="按类筛选：--类 0 或 --类 0 2 3")
+    parser.add_argument("--classes", nargs="+", type=int, default=0, help="按类筛选：--类 0 或 --类 0 2 3")
     parser.add_argument("--agnostic-nms", action="store_true", help="与类别无关的 NMS")
     parser.add_argument("--augment", action="store_true", help="增强推理")
     parser.add_argument("--visualize", action="store_true", help="可视化要素")
