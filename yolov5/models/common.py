@@ -451,7 +451,7 @@ class DetectMultiBackend(nn.Module):
         #   TensorFlow Lite:                *.tflite
         #   TensorFlow Edge TPU:            *_edgetpu.tflite
         #   PaddlePaddle:                   *_paddle_model
-        from models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
+        from yolov5.models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
 
         super().__init__()
         w = str(weights[0] if isinstance(weights, list) else weights)
@@ -623,7 +623,7 @@ class DetectMultiBackend(nn.Module):
         elif triton:  # NVIDIA Triton Inference Server
             LOGGER.info(f"Using {w} as Triton Inference Server...")
             check_requirements("tritonclient[all]")
-            from utils.triton import TritonRemoteModel
+            from yolov5.utils.triton import TritonRemoteModel
 
             model = TritonRemoteModel(url=w)
             nhwc = model.runtime.startswith("tensorflow")
