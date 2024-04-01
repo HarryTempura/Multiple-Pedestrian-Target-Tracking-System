@@ -133,13 +133,16 @@ class MainWindow(QMainWindow):
         开始运行
         :return:
         """
-        logger.info('开始运行跟踪程序')
-
         # 非空校验
         if self.video_file is None:
             QMessageBox.warning(self, '提示', '请先上传视频', QMessageBox.Ok)
+            return
 
-        # TODO: 接入运行逻辑
+        from yolov5.detect import start
+
+        logger.info('开始运行跟踪程序')
+
+        start(self.file_path)
 
     def logout(self):
         """

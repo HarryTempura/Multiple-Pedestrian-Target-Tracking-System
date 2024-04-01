@@ -39,13 +39,13 @@ import torch
 
 from ultralytics.utils.plotting import Annotator, colors, save_one_box
 
-from models.common import DetectMultiBackend
-from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
-from utils.general import (
+from yolov5.models.common import DetectMultiBackend
+from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
+from yolov5.utils.general import (
     LOGGER, Profile, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
     increment_path, non_max_suppression, print_args, scale_boxes, strip_optimizer, xyxy2xywh,
 )
-from utils.torch_utils import select_device, smart_inference_mode
+from yolov5.utils.torch_utils import select_device, smart_inference_mode
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 根目录
@@ -86,7 +86,7 @@ def run(
         vid_stride=1,  # video frame-rate stride
 ):
     source = str(source)
-    save_img = not nosave and not source.endswith(".txt")  # save inference images
+    save_img = not nosave and not source.endswith(".txt")  # 保存推理图像
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
     is_url = source.lower().startswith(("rtsp://", "rtmp://", "http://", "https://"))
     webcam = source.isnumeric() or source.endswith(".streams") or (is_url and not is_file)
@@ -95,8 +95,8 @@ def run(
         source = check_file(source)  # 下载
 
     # 目录
-    save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
-    (save_dir / "labels" if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
+    save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # 增量运行
+    (save_dir / "labels" if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # 制作目录
 
     # 加载模型
     device = select_device(device)
@@ -168,7 +168,7 @@ def run(
                     writer.writeheader()
                 writer.writerow(data)
 
-        # Process predictions
+        # 过程预测
         for i, det in enumerate(pred):  # 每张图片
             seen += 1
             if webcam:  # batch_size >= 1
@@ -203,14 +203,14 @@ def run(
                     if save_csv:
                         write_to_csv(p.name, label, confidence_str)
 
-                    if save_txt:  # Write to file
+                    if save_txt:  # 写入文件
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(f"{txt_path}.txt", "a") as f:
                             f.write(("%g " * len(line)).rstrip() % line + "\n")
 
-                    if save_img or save_crop or view_img:  # Add bbox to image
-                        c = int(cls)  # integer class
+                    if save_img or save_crop or view_img:  # 将 bbox 添加到图像
+                        c = int(cls)  # Integer 类
                         label = None if hide_labels else (names[c] if hide_conf else f"{names[c]} {conf:.2f}")
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:

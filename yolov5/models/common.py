@@ -35,9 +35,9 @@ except (ImportError, AssertionError):
 
 from ultralytics.utils.plotting import Annotator, colors, save_one_box
 
-from utils import TryExcept
-from utils.dataloaders import exif_transpose, letterbox
-from utils.general import (
+from yolov5.utils import TryExcept
+from yolov5.utils.dataloaders import exif_transpose, letterbox
+from yolov5.utils.general import (
     LOGGER,
     ROOT,
     Profile,
@@ -54,7 +54,7 @@ from utils.general import (
     xyxy2xywh,
     yaml_load,
 )
-from utils.torch_utils import copy_attr, smart_inference_mode
+from yolov5.utils.torch_utils import copy_attr, smart_inference_mode
 
 
 def autopad(k, p=None, d=1):
@@ -740,8 +740,8 @@ class DetectMultiBackend(nn.Module):
         Example: path='path/to/model.onnx' -> type=onnx
         """
         # types = [pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle]
-        from export import export_formats
-        from utils.downloads import is_url
+        from yolov5.export import export_formats
+        from yolov5.utils.downloads import is_url
 
         sf = list(export_formats().Suffix)  # export suffixes
         if not is_url(p, check=False):
