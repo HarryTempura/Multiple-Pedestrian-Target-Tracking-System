@@ -416,9 +416,9 @@ class Expand(nn.Module):
         """
         b, c, h, w = x.size()  # assert C / s ** 2 == 0, 'Indivisible gain'
         s = self.gain
-        x = x.view(b, s, s, c // s**2, h, w)  # x(1,2,2,16,80,80)
+        x = x.view(b, s, s, c // s ** 2, h, w)  # x(1,2,2,16,80,80)
         x = x.permute(0, 3, 4, 1, 5, 2).contiguous()  # x(1,16,80,2,80,2)
-        return x.view(b, c // s**2, h * s, w * s)  # x(1,16,160,160)
+        return x.view(b, c // s ** 2, h * s, w * s)  # x(1,16,160,160)
 
 
 class Concat(nn.Module):
@@ -1048,7 +1048,7 @@ class Proto(nn.Module):
 class Classify(nn.Module):
     # YOLOv5 classification head, i.e. x(b,c1,20,20) to x(b,c2)
     def __init__(
-        self, c1, c2, k=1, s=1, p=None, g=1, dropout_p=0.0
+            self, c1, c2, k=1, s=1, p=None, g=1, dropout_p=0.0
     ):  # ch_in, ch_out, kernel, stride, padding, groups, dropout probability
         super().__init__()
         c_ = 1280  # efficientnet_b0 size

@@ -50,15 +50,15 @@ from val import run as val_det
 
 
 def run(
-    weights=ROOT / "yolov5s.pt",  # weights path
-    imgsz=640,  # inference size (pixels)
-    batch_size=1,  # batch size
-    data=ROOT / "data/coco128.yaml",  # dataset.yaml path
-    device="",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-    half=False,  # use FP16 half-precision inference
-    test=False,  # test exports only
-    pt_only=False,  # test PyTorch only
-    hard_fail=False,  # throw error on benchmark failure
+        weights=ROOT / "yolov5s.pt",  # weights path
+        imgsz=640,  # inference size (pixels)
+        batch_size=1,  # batch size
+        data=ROOT / "data/coco128.yaml",  # dataset.yaml path
+        device="",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+        half=False,  # use FP16 half-precision inference
+        test=False,  # test exports only
+        pt_only=False,  # test PyTorch only
+        hard_fail=False,  # throw error on benchmark failure
 ):
     y, t = [], time.time()
     device = select_device(device)
@@ -114,15 +114,15 @@ def run(
 
 
 def test(
-    weights=ROOT / "yolov5s.pt",  # weights path
-    imgsz=640,  # inference size (pixels)
-    batch_size=1,  # batch size
-    data=ROOT / "data/coco128.yaml",  # dataset.yaml path
-    device="",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-    half=False,  # use FP16 half-precision inference
-    test=False,  # test exports only
-    pt_only=False,  # test PyTorch only
-    hard_fail=False,  # throw error on benchmark failure
+        weights=ROOT / "yolov5s.pt",  # weights path
+        imgsz=640,  # inference size (pixels)
+        batch_size=1,  # batch size
+        data=ROOT / "data/coco128.yaml",  # dataset.yaml path
+        device="",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+        half=False,  # use FP16 half-precision inference
+        test=False,  # test exports only
+        pt_only=False,  # test PyTorch only
+        hard_fail=False,  # throw error on benchmark failure
 ):
     y, t = [], time.time()
     device = select_device(device)

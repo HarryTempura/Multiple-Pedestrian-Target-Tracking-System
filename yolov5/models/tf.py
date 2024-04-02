@@ -167,7 +167,7 @@ class TFDWConvTranspose2d(keras.layers.Layer):
                 padding="VALID",
                 output_padding=p2,
                 use_bias=True,
-                kernel_initializer=keras.initializers.Constant(weight[..., i : i + 1]),
+                kernel_initializer=keras.initializers.Constant(weight[..., i: i + 1]),
                 bias_initializer=keras.initializers.Constant(bias[i]),
             )
             for i in range(c1)
@@ -413,7 +413,7 @@ class TFDetect(keras.layers.Layer):
                 # Normalize xywh to 0-1 to reduce calibration error
                 xy /= tf.constant([[self.imgsz[1], self.imgsz[0]]], dtype=tf.float32)
                 wh /= tf.constant([[self.imgsz[1], self.imgsz[0]]], dtype=tf.float32)
-                y = tf.concat([xy, wh, tf.sigmoid(y[..., 4 : 5 + self.nc]), y[..., 5 + self.nc :]], -1)
+                y = tf.concat([xy, wh, tf.sigmoid(y[..., 4: 5 + self.nc]), y[..., 5 + self.nc:]], -1)
                 z.append(tf.reshape(y, [-1, self.na * ny * nx, self.no]))
 
         return tf.transpose(x, [0, 2, 1, 3]) if self.training else (tf.concat(z, 1),)
@@ -603,14 +603,14 @@ class TFModel:
         self.model, self.savelist = parse_model(deepcopy(self.yaml), ch=[ch], model=model, imgsz=imgsz)
 
     def predict(
-        self,
-        inputs,
-        tf_nms=False,
-        agnostic_nms=False,
-        topk_per_class=100,
-        topk_all=100,
-        iou_thres=0.45,
-        conf_thres=0.25,
+            self,
+            inputs,
+            tf_nms=False,
+            agnostic_nms=False,
+            topk_per_class=100,
+            topk_all=100,
+            iou_thres=0.45,
+            conf_thres=0.25,
     ):
         y = []  # outputs
         x = inputs
@@ -724,10 +724,10 @@ def representative_dataset_gen(dataset, ncalib=100):
 
 
 def run(
-    weights=ROOT / "yolov5s.pt",  # weights path
-    imgsz=(640, 640),  # inference size h,w
-    batch_size=1,  # batch size
-    dynamic=False,  # dynamic batch size
+        weights=ROOT / "yolov5s.pt",  # weights path
+        imgsz=(640, 640),  # inference size h,w
+        batch_size=1,  # batch size
+        dynamic=False,  # dynamic batch size
 ):
     # PyTorch model
     im = torch.zeros((batch_size, 3, *imgsz))  # BCHW image

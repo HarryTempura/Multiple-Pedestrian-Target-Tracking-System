@@ -152,7 +152,7 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleF
 
 
 def random_perspective(
-    im, targets=(), segments=(), degrees=10, translate=0.1, scale=0.1, shear=10, perspective=0.0, border=(0, 0)
+        im, targets=(), segments=(), degrees=10, translate=0.1, scale=0.1, shear=10, perspective=0.0, border=(0, 0)
 ):
     # torchvision.transforms.RandomAffine(degrees=(-10, 10), translate=(0.1, 0.1), scale=(0.9, 1.1), shear=(-10, 10))
     # targets = [cls, xyxy]
@@ -324,16 +324,16 @@ def box_candidates(box1, box2, wh_thr=2, ar_thr=100, area_thr=0.1, eps=1e-16):
 
 
 def classify_albumentations(
-    augment=True,
-    size=224,
-    scale=(0.08, 1.0),
-    ratio=(0.75, 1.0 / 0.75),  # 0.75, 1.33
-    hflip=0.5,
-    vflip=0.0,
-    jitter=0.4,
-    mean=IMAGENET_MEAN,
-    std=IMAGENET_STD,
-    auto_aug=False,
+        augment=True,
+        size=224,
+        scale=(0.08, 1.0),
+        ratio=(0.75, 1.0 / 0.75),  # 0.75, 1.33
+        hflip=0.5,
+        vflip=0.0,
+        jitter=0.4,
+        mean=IMAGENET_MEAN,
+        std=IMAGENET_STD,
+        auto_aug=False,
 ):
     # YOLOv5 classification Albumentations (optional, only used if package is installed)
     prefix = colorstr("albumentations: ")
@@ -397,7 +397,7 @@ class LetterBox:
         hs, ws = (math.ceil(x / self.stride) * self.stride for x in (h, w)) if self.auto else self.h, self.w
         top, left = round((hs - h) / 2 - 0.1), round((ws - w) / 2 - 0.1)
         im_out = np.full((self.h, self.w, 3), 114, dtype=im.dtype)
-        im_out[top : top + h, left : left + w] = cv2.resize(im, (w, h), interpolation=cv2.INTER_LINEAR)
+        im_out[top: top + h, left: left + w] = cv2.resize(im, (w, h), interpolation=cv2.INTER_LINEAR)
         return im_out
 
 
@@ -417,7 +417,7 @@ class CenterCrop:
         imh, imw = im.shape[:2]
         m = min(imh, imw)  # min dimension
         top, left = (imh - m) // 2, (imw - m) // 2
-        return cv2.resize(im[top : top + m, left : left + m], (self.w, self.h), interpolation=cv2.INTER_LINEAR)
+        return cv2.resize(im[top: top + m, left: left + m], (self.w, self.h), interpolation=cv2.INTER_LINEAR)
 
 
 class ToTensor:

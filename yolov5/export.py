@@ -388,18 +388,18 @@ def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose
 
 @try_export
 def export_saved_model(
-    model,
-    im,
-    file,
-    dynamic,
-    tf_nms=False,
-    agnostic_nms=False,
-    topk_per_class=100,
-    topk_all=100,
-    iou_thres=0.45,
-    conf_thres=0.25,
-    keras=False,
-    prefix=colorstr("TensorFlow SavedModel:"),
+        model,
+        im,
+        file,
+        dynamic,
+        tf_nms=False,
+        agnostic_nms=False,
+        topk_per_class=100,
+        topk_all=100,
+        iou_thres=0.45,
+        conf_thres=0.25,
+        keras=False,
+        prefix=colorstr("TensorFlow SavedModel:"),
 ):
     # YOLOv5 TensorFlow SavedModel export
     try:
@@ -468,7 +468,7 @@ def export_pb(keras_model, file, prefix=colorstr("TensorFlow GraphDef:")):
 
 @try_export
 def export_tflite(
-    keras_model, im, file, int8, per_tensor, data, nms, agnostic_nms, prefix=colorstr("TensorFlow Lite:")
+        keras_model, im, file, int8, per_tensor, data, nms, agnostic_nms, prefix=colorstr("TensorFlow Lite:")
 ):
     # YOLOv5 TensorFlow Lite export
     import tensorflow as tf
@@ -516,10 +516,10 @@ def export_edgetpu(file, prefix=colorstr("Edge TPU:")):
         LOGGER.info(f"\n{prefix} export requires Edge TPU compiler. Attempting install from {help_url}")
         sudo = subprocess.run("sudo --version >/dev/null", shell=True).returncode == 0  # sudo installed on system
         for c in (
-            "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -",
-            'echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list',
-            "sudo apt-get update",
-            "sudo apt-get install edgetpu-compiler",
+                "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -",
+                'echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list',
+                "sudo apt-get update",
+                "sudo apt-get install edgetpu-compiler",
         ):
             subprocess.run(c if sudo else c.replace("sudo ", ""), shell=True, check=True)
     ver = subprocess.run(cmd, shell=True, capture_output=True, check=True).stdout.decode().split()[-1]
@@ -754,29 +754,29 @@ def pipeline_coreml(model, im, file, names, y, prefix=colorstr("CoreML Pipeline:
 
 @smart_inference_mode()
 def run(
-    data=ROOT / "data/coco128.yaml",  # 'dataset.yaml path'
-    weights=ROOT / "yolov5s.pt",  # weights path
-    imgsz=(640, 640),  # image (height, width)
-    batch_size=1,  # batch size
-    device="cpu",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-    include=("torchscript", "onnx"),  # include formats
-    half=False,  # FP16 half-precision export
-    inplace=False,  # set YOLOv5 Detect() inplace=True
-    keras=False,  # use Keras
-    optimize=False,  # TorchScript: optimize for mobile
-    int8=False,  # CoreML/TF INT8 quantization
-    per_tensor=False,  # TF per tensor quantization
-    dynamic=False,  # ONNX/TF/TensorRT: dynamic axes
-    simplify=False,  # ONNX: simplify model
-    opset=12,  # ONNX: opset version
-    verbose=False,  # TensorRT: verbose log
-    workspace=4,  # TensorRT: workspace size (GB)
-    nms=False,  # TF: add NMS to model
-    agnostic_nms=False,  # TF: add agnostic NMS to model
-    topk_per_class=100,  # TF.js NMS: topk per class to keep
-    topk_all=100,  # TF.js NMS: topk for all classes to keep
-    iou_thres=0.45,  # TF.js NMS: IoU threshold
-    conf_thres=0.25,  # TF.js NMS: confidence threshold
+        data=ROOT / "data/coco128.yaml",  # 'dataset.yaml path'
+        weights=ROOT / "yolov5s.pt",  # weights path
+        imgsz=(640, 640),  # image (height, width)
+        batch_size=1,  # batch size
+        device="cpu",  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+        include=("torchscript", "onnx"),  # include formats
+        half=False,  # FP16 half-precision export
+        inplace=False,  # set YOLOv5 Detect() inplace=True
+        keras=False,  # use Keras
+        optimize=False,  # TorchScript: optimize for mobile
+        int8=False,  # CoreML/TF INT8 quantization
+        per_tensor=False,  # TF per tensor quantization
+        dynamic=False,  # ONNX/TF/TensorRT: dynamic axes
+        simplify=False,  # ONNX: simplify model
+        opset=12,  # ONNX: opset version
+        verbose=False,  # TensorRT: verbose log
+        workspace=4,  # TensorRT: workspace size (GB)
+        nms=False,  # TF: add NMS to model
+        agnostic_nms=False,  # TF: add agnostic NMS to model
+        topk_per_class=100,  # TF.js NMS: topk per class to keep
+        topk_all=100,  # TF.js NMS: topk for all classes to keep
+        iou_thres=0.45,  # TF.js NMS: IoU threshold
+        conf_thres=0.25,  # TF.js NMS: confidence threshold
 ):
     t = time.time()
     include = [x.lower() for x in include]  # to lowercase
