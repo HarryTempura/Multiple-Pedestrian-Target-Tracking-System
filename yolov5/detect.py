@@ -293,25 +293,25 @@ def parse_opt(video_path=(ROOT / "data/images")):
     parser.add_argument("--half", action="store_true", help="使用 FP16 半精度推理")
     parser.add_argument("--dnn", action="store_true", help="使用 OpenCV DNN 进行 ONNX 推理")
     parser.add_argument("--vid-stride", type=int, default=1, help="视频帧速率步幅")
-    opt = parser.parse_args()
-    opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
-    print_args(vars(opt))
-    return opt
+    opts = parser.parse_args()
+    opts.imgsz *= 2 if len(opts.imgsz) == 1 else 1  # expand
+    print_args(vars(opts))
+    return opts
 
 
 def start(video_path):
-    opt = parse_opt(video_path)
-    main(opt)
+    opts = parse_opt(video_path)
+    main(opts)
 
 
-def main(opt):
+def main(opts):
     """
     使用给定选项执行 YOLOv5 模型推理，在运行模型之前检查需求。
-    :param opt:
+    :param opts:
     :return:
     """
     check_requirements(ROOT / "requirements.txt", exclude=("tensorboard", "thop"))
-    run(**vars(opt))
+    run(**vars(opts))
 
 
 if __name__ == "__main__":
