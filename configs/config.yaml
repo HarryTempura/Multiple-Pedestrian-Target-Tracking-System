@@ -8,3 +8,10 @@ generic:
 
 background:
   image: data/images/MOSS.jpeg
+
+track:
+  min_confidence: 0.0
+  nms_max_overlap: 1.0
+  min_detection_height: 0.0
+  max_cosine_detection: 0.7
+  nn_budget: 1

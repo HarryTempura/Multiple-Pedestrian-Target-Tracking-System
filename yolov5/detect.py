@@ -28,37 +28,29 @@ Usage - formats:
                                  yolov5s_paddle_model       # PaddlePaddle
 """
 
-import argparse
 import csv
-import os
 import platform
-import sys
 from pathlib import Path
 
 import torch
 
 from ultralytics.utils.plotting import Annotator, colors, save_one_box
 
+from main import ROOT
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
 from yolov5.utils.general import (
     LOGGER, Profile, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
-    increment_path, non_max_suppression, print_args, scale_boxes, strip_optimizer, xyxy2xywh,
+    increment_path, non_max_suppression, scale_boxes, strip_optimizer, xyxy2xywh,
 )
 from yolov5.utils.torch_utils import select_device, smart_inference_mode
-
-FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # YOLOv5 根目录
-if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))  # 将 ROOT 添加到 PATH
-ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # 相对
 
 
 @smart_inference_mode()
 def run(
-        weights=ROOT / "yolov5s.pt",  # model path or triton URL
-        source=ROOT / "data/images",  # file/dir/URL/glob/screen/0(webcam)
-        data=ROOT / "data/coco128.yaml",  # dataset.yaml path
+        weights=ROOT / "yolov5/yolov5s.pt",  # model path or triton URL
+        source=ROOT / "yolov5/data/images",  # file/dir/URL/glob/screen/0(webcam)
+        data=ROOT / "yolov5/data/coco128.yaml",  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
@@ -75,7 +67,7 @@ def run(
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project=ROOT / "runs/detect",  # save results to project/name
+        project=ROOT / "yolov5/runs/detect",  # save results to project/name
         name="exp",  # save results to project/name
         exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
@@ -258,62 +250,17 @@ def run(
         strip_optimizer(weights[0])  # 更新模型（用于修复 SourceChangeWarning）
 
 
-def parse_opt(video_path=(ROOT / "data/images")):
-    """
-    解析 YOLOv5 检测的命令行参数，设置推理选项和模型配置。
-    :param video_path: 默认视频路径
-    :return:
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "yolov5s.pt", help="模型路径或 triton URL")
-    parser.add_argument("--source", type=str, default=video_path, help="file/dir/URL/glob/screen/0(webcam)")
-    parser.add_argument("--data", type=str, default=ROOT / "data/coco128.yaml", help="（可选）dataset.yaml 路径")
-    parser.add_argument("--imgsz", "--img", "--img-size", nargs="+", type=int, default=[640], help="推理大小 h，w")
-    parser.add_argument("--conf-thres", type=float, default=0.25, help="置信阈值")
-    parser.add_argument("--iou-thres", type=float, default=0.45, help="NMS IoU 阈值")
-    parser.add_argument("--max-det", type=int, default=1000, help="每张图像的最大检测次数")
-    parser.add_argument("--device", default="", help="CUDA 设备，即 0 或 0、1、2、3 或 CPU")
-    parser.add_argument("--view-img", action="store_true", help="显示结果")
-    parser.add_argument("--save-txt", action="store_true", help="将结果保存到 *.txt")
-    parser.add_argument("--save-csv", action="store_true", help="以 CSV 格式保存结果")
-    parser.add_argument("--save-conf", action="store_true", help="在 --save-txt 标签中保存置信度")
-    parser.add_argument("--save-crop", action="store_true", help="保存裁剪的预测框")
-    parser.add_argument("--nosave", action="store_true", help="不保存图像/视频")
-    parser.add_argument("--classes", nargs="+", type=int, default=0, help="按类筛选：--类 0 或 --类 0 2 3")
-    parser.add_argument("--agnostic-nms", action="store_true", help="与类别无关的 NMS")
-    parser.add_argument("--augment", action="store_true", help="增强推理")
-    parser.add_argument("--visualize", action="store_true", help="可视化要素")
-    parser.add_argument("--update", action="store_true", help="更新全部 models")
-    parser.add_argument("--project", default=ROOT / "runs/detect", help="将结果保存到 project/name")
-    parser.add_argument("--name", default="exp", help="将结果保存到 project/name")
-    parser.add_argument("--exist-ok", action="store_true", help="现有 project/name 正常，不递增")
-    parser.add_argument("--line-thickness", default=3, type=int, help="边界框厚度（像素）")
-    parser.add_argument("--hide-labels", default=False, action="store_true", help="隐藏标签")
-    parser.add_argument("--hide-conf", default=False, action="store_true", help="隐藏置信度")
-    parser.add_argument("--half", action="store_true", help="使用 FP16 半精度推理")
-    parser.add_argument("--dnn", action="store_true", help="使用 OpenCV DNN 进行 ONNX 推理")
-    parser.add_argument("--vid-stride", type=int, default=1, help="视频帧速率步幅")
-    opts = parser.parse_args()
-    opts.imgsz *= 2 if len(opts.imgsz) == 1 else 1  # expand
-    print_args(vars(opts))
-    return opts
-
-
-def start(video_path):
-    opts = parse_opt(video_path)
-    main(opts)
-
-
-def main(opts):
+def start(opt, video_path):
     """
     使用给定选项执行 YOLOv5 模型推理，在运行模型之前检查需求。
-    :param opts:
+    :param opt:
     :return:
     """
-    check_requirements(ROOT / "requirements.txt", exclude=("tensorboard", "thop"))
-    run(**vars(opts))
-
-
-if __name__ == "__main__":
-    opt = parse_opt()
-    main(opt)
+    check_requirements(ROOT / "yolov5/requirements.txt", exclude=("tensorboard", "thop"))
+    # run(**vars(opt), source=video_path)
+    run(
+        opt.weights, video_path, opt.data, opt.imgsz, opt.conf_thres, opt.iou_thres, opt.max_det, opt.device,
+        opt.view_img, opt.save_txt, opt.save_csv, opt.save_conf, opt.save_crop, opt.nosave, opt.classes,
+        opt.agnostic_nms, opt.augment, opt.visualize, opt.update, opt.project, opt.name, opt.exist_ok,
+        opt.line_thickness, opt.hide_labels, opt.hide_conf, opt.half, opt.dnn, opt.vid_stride
+    )

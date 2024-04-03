@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidg
     QHBoxLayout, QSizePolicy, QFileDialog, QMessageBox
 
 from controls.animated_button import AnimatedButton
+from main import opt
 from pages.login import LoginWindow
 from utils import logger
 
@@ -142,7 +143,7 @@ class MainWindow(QMainWindow):
 
         logger.info('开始运行跟踪程序')
 
-        start(self.file_path)
+        start(opt, self.file_path)
 
     def logout(self):
         """
