@@ -1,0 +1,12 @@
+root_train = 'D:\\DataSet\\MOT17\\train'
+train_batch = 128
+train_epoch = 256
+train_lr = 0.001
+train_warm = 0
+train_decay = 0.00001
+num_workers = 0
+val_batch = 256
+model_minLen = 30
+model_inputLen = 30
+model_savedir = 'data/models'
+save_model = False

@@ -108,7 +108,7 @@ def create_detections(detection_mat, frame_idx, min_height=0):
     return detection_list
 
 
-def run(sequence_dir, detection_file, output_file, output_eval, min_confidence, nms_max_overlap, min_detection_height,
+def run(sequence_dir, detection_file, output_file, min_confidence, nms_max_overlap, min_detection_height,
         max_cosine_distance, nn_budget, display, data_loader):
     """
     在一个特定的序列上运行多目标检测器
@@ -194,7 +194,6 @@ def run(sequence_dir, detection_file, output_file, output_eval, min_confidence, 
     # 存储结果
     if opt.res_save:
         f = open(output_file, 'w')
-        e = open(output_eval, 'w')
         for row in results:
             print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (row[0], row[1], row[2], row[3], row[4], row[5]), file=f)
             print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (row[0], row[1], row[2], row[3], row[4], row[5]), file=e)

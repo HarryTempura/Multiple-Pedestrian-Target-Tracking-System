@@ -15,3 +15,6 @@ track:
   min_detection_height: 0.0
   max_cosine_detection: 0.7
   nn_budget: 1
+  path_AFLink: del_sort/data/models/AFLinkModel_1.2.0_epoch256.pth
+  path_save: del_sort/data/results
+  MC_lambda: 0.98
