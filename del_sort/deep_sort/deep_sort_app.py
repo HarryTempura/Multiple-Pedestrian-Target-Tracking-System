@@ -118,8 +118,6 @@ def run(sequence_dir, detection_file, output_file, min_confidence, nms_max_overl
         检测结果文件夹路径
     :param output_file: str
         跟踪结果保存路径
-    :param output_eval: str
-        跟踪结果保存路径(评估用)
     :param min_confidence: float
         最小检测置信度
     :param nms_max_overlap: float
@@ -138,7 +136,7 @@ def run(sequence_dir, detection_file, output_file, min_confidence, nms_max_overl
     """
     # 在这个位置替换成我自己的数据集信息
     # seq_info = gather_sequence_info(sequence_dir, detection_file)
-    seq_info = data_loader.gather_sequence_info(sequence_dir)
+    seq_info = data_loader.gather_sequence_info(sequence_dir, detection_file)
     metric = nn_matching.NearestNeighborDistanceMetric('cosine', max_cosine_distance, nn_budget)
     # tracker = Tracker(metric, int(seq_info["update_ms"]))
     tracker = Tracker(metric, 1)  # TODO:轨迹的最大生命周期
@@ -196,7 +194,6 @@ def run(sequence_dir, detection_file, output_file, min_confidence, nms_max_overl
         f = open(output_file, 'w')
         for row in results:
             print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (row[0], row[1], row[2], row[3], row[4], row[5]), file=f)
-            print('%d,%d,%.2f,%.2f,%.2f,%.2f,1,-1,-1,-1' % (row[0], row[1], row[2], row[3], row[4], row[5]), file=e)
 
 
 def bool_string(input_string):  # 将字符串转换成布尔值

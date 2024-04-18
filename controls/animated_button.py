@@ -12,21 +12,21 @@ class AnimatedButton(QPushButton):
 
     def mousePressEvent(self, event):
         self.shadow = 30
-        self.animateShadow(0, 30)
+        self.animate_shadow(0, 30)
         super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         self.shadow = 0
-        self.animateShadow(30, 0)
+        self.animate_shadow(30, 0)
         super().mouseReleaseEvent(event)
 
-    def animateShadow(self, start_value, end_value):
+    def animate_shadow(self, start_value, end_value):
         self.animation.setDuration(100)
         self.animation.setStartValue(start_value)
         self.animation.setEndValue(end_value)
         self.animation.start()
 
-    def setShadow(self, value):
+    def set_shadow(self, value):
         self.shadow = value
         self.update()
 

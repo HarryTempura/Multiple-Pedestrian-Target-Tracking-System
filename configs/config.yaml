@@ -1,6 +1,6 @@
 main:
   window_width: 1280
-  window_height: 720
+  window_height: 800
 
 generic:
   window_width: 640

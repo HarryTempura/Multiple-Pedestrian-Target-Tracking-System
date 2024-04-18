@@ -249,18 +249,23 @@ def run(
     if update:
         strip_optimizer(weights[0])  # 更新模型（用于修复 SourceChangeWarning）
 
+    return f'{txt_path}.txt'
+
 
 def start(opt, video_path):
     """
     使用给定选项执行 YOLOv5 模型推理，在运行模型之前检查需求。
-    :param opt:
+    :param video_path: 视频文件路径
+    :param opt: 配置信息
     :return:
     """
     check_requirements(ROOT / "yolov5/requirements.txt", exclude=("tensorboard", "thop"))
     # run(**vars(opt), source=video_path)
-    run(
+    det_path = run(
         opt.weights, video_path, opt.data, opt.imgsz, opt.conf_thres, opt.iou_thres, opt.max_det, opt.device,
         opt.view_img, opt.save_txt, opt.save_csv, opt.save_conf, opt.save_crop, opt.nosave, opt.classes,
         opt.agnostic_nms, opt.augment, opt.visualize, opt.update, opt.project, opt.name, opt.exist_ok,
         opt.line_thickness, opt.hide_labels, opt.hide_conf, opt.half, opt.dnn, opt.vid_stride
     )
+
+    return det_path

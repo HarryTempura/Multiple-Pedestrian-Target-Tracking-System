@@ -10,15 +10,17 @@ from del_sort.AFLink.dataset import LinkData
 from del_sort.AFLink.model import PostLinker
 from del_sort.GSI.GSI import gaussian_interpolation
 from del_sort.deep_sort.deep_sort_app import run
+from del_sort.processor import Processor
+from del_sort.sort_loader import SORTLoader
 from main import opt
 
 warnings.filterwarnings("ignore")
 
 
-def start():
-    feature_extractor = Extractor(cfg)  # TODO: 这个位置定义特征提取器
-    processor = Preprocessor(cfg)
-    data_loader = Loader(feature_extractor, processor)
+def start(video_file, detection_file):
+    feat_extractor = Extractor(cfg)  # TODO: 这个位置定义特征提取器
+    processor = Processor(cfg)
+    data_loader = SORTLoader(feat_extractor, processor)
 
     if opt.AFLink:  # 启用AFLink
         model = PostLinker()
@@ -29,8 +31,8 @@ def start():
         print('Processing the {}th video {} ...'.format(i, seq))
         path_save = join(opt.dir_save, seq + '.txt')
 
-        run(sequence_dir=join(opt.dir_dataset, seq),
-            detection_file=join(opt.dir_dets, seq + '.npy'),
+        run(sequence_dir=video_file,
+            detection_file=detection_file,
             output_file=path_save,
             min_confidence=opt.min_confidence,
             nms_max_overlap=opt.nms_max_overlap,
@@ -59,7 +61,3 @@ def start():
 
         if opt.GSI:  # 启用高斯平滑
             gaussian_interpolation(path_in=path_save, path_out=path_save, interval=20, tau=10)
-
-
-if __name__ == '__main__':
-    start()

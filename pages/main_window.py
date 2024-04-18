@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QLabel, QPushButton, QWidg
     QHBoxLayout, QSizePolicy, QFileDialog, QMessageBox
 
 from controls.animated_button import AnimatedButton
+from del_sort import del_sort_app
 from main import opt
 from pages.login import LoginWindow
 from utils import logger
@@ -12,13 +13,17 @@ from utils import logger
 
 class MainWindow(QMainWindow):
     def __init__(self, position=None):
+        """
+        主页
+        :param position: 位置
+        """
         logger.info('初始化主页')
 
         super().__init__()
 
+        self.det_path = None
         self.file_path = None
         self.login_window = None
-        self.video_file = None
 
         # 读取 YAML 文件
         with open('configs/config.yaml', 'r') as file:
@@ -114,20 +119,20 @@ class MainWindow(QMainWindow):
         if self.file_path:
             logger.info("选择文件路径：" + self.file_path)
 
-            self.video_file = cv2.VideoCapture(self.file_path)
+            video_file = cv2.VideoCapture(self.file_path)
 
             # 获取视频的基本信息
-            fps = self.video_file.get(cv2.CAP_PROP_FPS)
-            frame_count = int(self.video_file.get(cv2.CAP_PROP_FRAME_COUNT))
-            width = int(self.video_file.get(cv2.CAP_PROP_FRAME_WIDTH))
-            height = int(self.video_file.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            fps = video_file.get(cv2.CAP_PROP_FPS)
+            frame_count = int(video_file.get(cv2.CAP_PROP_FRAME_COUNT))
+            width = int(video_file.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(video_file.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
             # 将视频信息显示到展示框中
             self.video_info_text.append(self.file_path)
             self.video_info_text.append(f"帧率: {fps}")
             self.video_info_text.append(f"总帧数: {frame_count}")
             self.video_info_text.append(f"分辨率: {width}x{height}")
-            self.display_first_frame(self.video_file)
+            self.display_first_frame(video_file)
 
     def start(self):
         """
@@ -135,15 +140,16 @@ class MainWindow(QMainWindow):
         :return:
         """
         # 非空校验
-        if self.video_file is None:
+        if self.file_path is None:
             QMessageBox.warning(self, '提示', '请先上传视频', QMessageBox.Ok)
             return
 
-        from yolov5.detect import start
+        from yolov5 import detect
 
         logger.info('开始运行跟踪程序')
 
-        start(opt, self.file_path)
+        self.det_path = detect.start(opt, self.file_path)
+        # del_sort_app.start(self.file_path, self.det_path)  # TODO: 传参未完成
 
     def logout(self):
         """
@@ -174,6 +180,8 @@ class MainWindow(QMainWindow):
             pixmap = QPixmap.fromImage(q_image)
             label = QLabel()
             label.setPixmap(pixmap)
+            label.setScaledContents(True)  # 自适应大小以保持比例
+
             self.video_info_text.setStyleSheet(
                 "background-color: rgba(255, 255, 255, 128); color: white; border-radius: 5px;"
             )

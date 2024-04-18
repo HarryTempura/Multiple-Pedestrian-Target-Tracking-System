@@ -49,7 +49,7 @@ def parse_opt():
     parser.add_argument("--project", default=ROOT / "yolov5/runs/detect", help="将结果保存到 project/name")
     parser.add_argument("--name", default="exp", help="将结果保存到 project/name")
     parser.add_argument("--exist-ok", action="store_true", help="现有 project/name 正常，不递增")
-    parser.add_argument("--line-thickness", default=100, type=int, help="边界框厚度（像素）")
+    parser.add_argument("--line-thickness", default=3, type=int, help="边界框厚度（像素）")
     parser.add_argument("--hide-labels", default=False, action="store_true", help="隐藏标签")
     parser.add_argument("--hide-conf", default=False, action="store_true", help="隐藏置信度")
     parser.add_argument("--half", action="store_true", help="使用 FP16 半精度推理")
